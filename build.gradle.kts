@@ -22,13 +22,16 @@ plugins {
   alias(libs.plugins.spotless)
   alias(libs.plugins.version.catalog.update)
   alias(libs.plugins.dokka)
+  alias(libs.plugins.git.version)
   alias(libs.plugins.maven.publish)
   jacoco
 }
 
 group = "io.github.mschout"
 
-version = "0.9.0"
+val gitVersion: groovy.lang.Closure<String> by extra
+
+version = gitVersion()
 
 repositories { mavenCentral() }
 
