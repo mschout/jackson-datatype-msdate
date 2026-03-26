@@ -28,7 +28,7 @@ plugins {
 
 group = "io.github.mschout"
 
-version = "1.0-SNAPSHOT"
+version = "0.9.0"
 
 repositories { mavenCentral() }
 
