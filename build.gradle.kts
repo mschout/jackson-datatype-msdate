@@ -50,11 +50,15 @@ spotless {
     }
     trimTrailingWhitespace()
     endWithNewline()
+
+    licenseHeaderFile(rootProject.file("LICENSE_HEADER"))
   }
 
   kotlinGradle {
     target("*.gradle.kts")
     ktfmt()
+
+    licenseHeaderFile(rootProject.file("LICENSE_HEADER"), "(plugins|import) ")
   }
 }
 
