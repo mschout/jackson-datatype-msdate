@@ -33,6 +33,7 @@ repositories { mavenCentral() }
 dependencies {
   api(libs.jackson.core)
   api(libs.jackson.databind)
+  implementation(libs.microsoft.json.date.parser)
   testImplementation(libs.kotest.runner.junit5)
   testImplementation(libs.kotest.assertions.core)
 }

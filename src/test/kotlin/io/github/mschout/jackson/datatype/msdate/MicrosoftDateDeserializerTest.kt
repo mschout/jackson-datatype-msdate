@@ -21,6 +21,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import java.time.Instant
+import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 
@@ -84,5 +85,58 @@ class MicrosoftDateDeserializerTest :
         val expected =
             Instant.ofEpochMilli(1705305000000L).atOffset(ZoneOffset.ofHoursMinutes(-3, -30))
         result shouldBe expected
+      }
+
+      context("LocalDate deserialization") {
+        test("deserializes date with positive offset to LocalDate") {
+          val result = mapper.readValue("\"/Date(1705305000000+0530)/\"", LocalDate::class.java)
+          // 1705305000000 ms = 2024-01-15T07:30:00Z, with +05:30 offset = 2024-01-15T13:00:00+05:30
+          result shouldBe LocalDate.of(2024, 1, 15)
+        }
+
+        test("deserializes date with negative offset to LocalDate") {
+          val result = mapper.readValue("\"/Date(1717243200000-0500)/\"", LocalDate::class.java)
+          // 1717243200000 ms = 2024-06-01T12:00:00Z, with -05:00 = 2024-06-01T07:00:00-05:00
+          result shouldBe LocalDate.of(2024, 6, 1)
+        }
+
+        test("deserializes date without offset to LocalDate") {
+          val result = mapper.readValue("\"/Date(1705305000000)/\"", LocalDate::class.java)
+          result shouldBe LocalDate.of(2024, 1, 15)
+        }
+
+        test("deserializes epoch zero to LocalDate") {
+          val result = mapper.readValue("\"/Date(0+0000)/\"", LocalDate::class.java)
+          result shouldBe LocalDate.of(1970, 1, 1)
+        }
+
+        test("deserializes negative ticks to LocalDate before epoch") {
+          val result = mapper.readValue("\"/Date(-86400000+0000)/\"", LocalDate::class.java)
+          result shouldBe LocalDate.of(1969, 12, 31)
+        }
+
+        test("throws on malformed input for LocalDate") {
+          shouldThrow<InvalidFormatException> {
+            mapper.readValue("\"not-a-date\"", LocalDate::class.java)
+          }
+        }
+
+        test("throws on empty string for LocalDate") {
+          shouldThrow<InvalidFormatException> { mapper.readValue("\"\"", LocalDate::class.java) }
+        }
+
+        test("throws on partial date format for LocalDate") {
+          shouldThrow<InvalidFormatException> {
+            mapper.readValue("\"/Date()/\"", LocalDate::class.java)
+          }
+        }
+
+        test("offset affects resulting LocalDate when crossing day boundary") {
+          // 2024-01-15T23:00:00Z with +05:30 = 2024-01-16T04:30:00+05:30 -> LocalDate 2024-01-16
+          val ticks =
+              OffsetDateTime.of(2024, 1, 15, 23, 0, 0, 0, ZoneOffset.UTC).toInstant().toEpochMilli()
+          val result = mapper.readValue("\"/Date(${ticks}+0530)/\"", LocalDate::class.java)
+          result shouldBe LocalDate.of(2024, 1, 16)
+        }
       }
     })

@@ -18,9 +18,11 @@ package io.github.mschout.jackson.datatype.msdate
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
-import java.time.Instant
+import io.github.mschout.microsoft.json.date.MicrosoftJsonDateParser
+import java.time.LocalDate
 import java.time.OffsetDateTime
-import java.time.ZoneOffset
+
+private const val PARSE_ERROR_MSG = "Expected Microsoft date format: /Date(ticks[+-]offset)/"
 
 /**
  * A custom deserializer for parsing Microsoft-style date strings into `OffsetDateTime` objects.
@@ -37,32 +39,30 @@ import java.time.ZoneOffset
  * This deserializer is compatible with Jackson's `ObjectMapper` and can be registered via a custom
  * module, such as `MicrosoftDateModule`.
  */
-class MicrosoftDateDeserializer : JsonDeserializer<OffsetDateTime>() {
+class MicrosoftDateOffsetDateTimeDeserializer : JsonDeserializer<OffsetDateTime>() {
+  private val parser = MicrosoftJsonDateParser()
+
   override fun deserialize(p: JsonParser, ctx: DeserializationContext): OffsetDateTime? {
     val text = p.text ?: return null
-    val match =
-        MICROSOFT_DATE_PATTERN.matchEntire(text)
-            ?: throw ctx.weirdStringException(text, OffsetDateTime::class.java, PARSE_ERROR_MSG)
 
-    val ticks = match.groupValues[1].toLong()
-    val instant = Instant.ofEpochMilli(ticks)
-
-    val offsetStr = match.groupValues[2]
-    val offset =
-        if (offsetStr.isEmpty()) {
-          ZoneOffset.UTC
-        } else {
-          val sign = if (offsetStr[0] == '+') 1 else -1
-          val hours = offsetStr.substring(1, 3).toInt()
-          val minutes = offsetStr.substring(3, 5).toInt()
-          ZoneOffset.ofHoursMinutes(sign * hours, sign * minutes)
-        }
-
-    return instant.atOffset(offset)
+    try {
+      return parser.parse(text)?.offsetDateTime
+    } catch (_: IllegalArgumentException) {
+      throw ctx.weirdStringException(text, OffsetDateTime::class.java, PARSE_ERROR_MSG)
+    }
   }
+}
 
-  companion object {
-    private val MICROSOFT_DATE_PATTERN = Regex("""/Date\((-?\d+)([+-]\d{4})?\)/""")
-    private const val PARSE_ERROR_MSG = "Expected Microsoft date format: /Date(ticks[+-]offset)/"
+class MicrosoftDateLocalDateDeserializer : JsonDeserializer<LocalDate>() {
+  private val parser = MicrosoftJsonDateParser()
+
+  override fun deserialize(p: JsonParser, ctx: DeserializationContext): LocalDate? {
+    val text = p.text ?: return null
+
+    try {
+      return parser.parse(text)?.offsetDateTime?.toLocalDate()
+    } catch (_: IllegalArgumentException) {
+      throw ctx.weirdStringException(text, OffsetDateTime::class.java, PARSE_ERROR_MSG)
+    }
   }
 }

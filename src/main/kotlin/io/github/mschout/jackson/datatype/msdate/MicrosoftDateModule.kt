@@ -16,6 +16,7 @@
 package io.github.mschout.jackson.datatype.msdate
 
 import com.fasterxml.jackson.databind.module.SimpleModule
+import java.time.LocalDate
 import java.time.OffsetDateTime
 
 /**
@@ -38,7 +39,11 @@ import java.time.OffsetDateTime
  */
 class MicrosoftDateModule : SimpleModule("MicrosoftDateModule") {
   init {
-    addDeserializer(OffsetDateTime::class.java, MicrosoftDateDeserializer())
-    addSerializer(OffsetDateTime::class.java, MicrosoftDateSerializer())
+    // MicrosoftDate <-> OffsetDateTime
+    addDeserializer(OffsetDateTime::class.java, MicrosoftDateOffsetDateTimeDeserializer())
+    addSerializer(OffsetDateTime::class.java, MicrosoftDateOffsetDateTimeSerializer())
+
+    // MicrosoftDate -> LocalDate
+    addDeserializer(LocalDate::class.java, MicrosoftDateLocalDateDeserializer())
   }
 }

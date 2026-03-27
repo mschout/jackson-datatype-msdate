@@ -18,6 +18,7 @@ package io.github.mschout.jackson.datatype.msdate
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
+import io.github.mschout.microsoft.json.date.MicrosoftJsonDate
 import java.time.OffsetDateTime
 
 /**
@@ -33,19 +34,13 @@ import java.time.OffsetDateTime
  * The serialized output ensures compatibility with systems or APIs that expect Microsoft-style date
  * representations.
  */
-class MicrosoftDateSerializer : JsonSerializer<OffsetDateTime>() {
+class MicrosoftDateOffsetDateTimeSerializer : JsonSerializer<OffsetDateTime>() {
   override fun serialize(
       value: OffsetDateTime,
       gen: JsonGenerator,
       serializers: SerializerProvider,
   ) {
-    val ticks = value.toInstant().toEpochMilli()
-    val totalSeconds = value.offset.totalSeconds
-    val sign = if (totalSeconds >= 0) "+" else "-"
-    val absSeconds = Math.abs(totalSeconds)
-    val hours = absSeconds / 3600
-    val minutes = (absSeconds % 3600) / 60
-
-    gen.writeString("/Date($ticks$sign${"%02d%02d".format(hours, minutes)})/")
+    val msDate = MicrosoftJsonDate(value)
+    gen.writeString(msDate.toString())
   }
 }
