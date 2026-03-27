@@ -1,12 +1,8 @@
 [versions]
 dokka = "2.0.0"
-git-version = "5.0.0"
 jackson = "2.21.1"
 kotest = "6.1.9"
-kotlin = "2.3.10"
 maven-publish = "0.36.0"
-spotless = "8.4.0"
-version-catalog-update = "1.1.0"
 
 [libraries]
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
@@ -16,8 +12,4 @@ kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref 
 
 [plugins]
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-git-version = { id = "com.palantir.git-version", version.ref = "git-version" }
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
-spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
-version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "version-catalog-update" }

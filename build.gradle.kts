@@ -13,18 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.diffplug.spotless.kotlin.KtfmtStep
 import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.KotlinJvm
 
 plugins {
-  alias(libs.plugins.kotlin.jvm)
-  alias(libs.plugins.spotless)
-  alias(libs.plugins.version.catalog.update)
+  id("mschout.all-conventions")
   alias(libs.plugins.dokka)
-  alias(libs.plugins.git.version)
   alias(libs.plugins.maven.publish)
-  jacoco
 }
 
 group = "io.github.mschout"
@@ -43,42 +38,6 @@ dependencies {
 }
 
 kotlin { jvmToolchain(17) }
-
-tasks.test {
-  useJUnitPlatform()
-  dependsOn("spotlessCheck")
-  finalizedBy(tasks.jacocoTestReport)
-}
-
-tasks.jacocoTestReport {
-  dependsOn(tasks.test)
-  reports {
-    xml.required = true
-    html.required = true
-  }
-}
-
-spotless {
-  kotlin {
-    ktfmt("0.62").configure {
-      it.setBlockIndent(2)
-      it.setContinuationIndent(4)
-      it.setTrailingCommaManagementStrategy(KtfmtStep.TrailingCommaManagementStrategy.COMPLETE)
-      it.setRemoveUnusedImports(true)
-    }
-    trimTrailingWhitespace()
-    endWithNewline()
-
-    licenseHeaderFile(rootProject.file("LICENSE_HEADER"))
-  }
-
-  kotlinGradle {
-    target("*.gradle.kts")
-    ktfmt()
-
-    licenseHeaderFile(rootProject.file("LICENSE_HEADER"), "(plugins|import) ")
-  }
-}
 
 mavenPublishing {
   configure(KotlinJvm(javadocJar = JavadocJar.Dokka("dokkaGenerateModuleHtml")))
