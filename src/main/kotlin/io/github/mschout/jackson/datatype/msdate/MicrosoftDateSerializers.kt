@@ -35,6 +35,21 @@ import java.time.OffsetDateTime
  * representations.
  */
 class MicrosoftDateOffsetDateTimeSerializer : JsonSerializer<OffsetDateTime>() {
+  /**
+   * Serializes an `OffsetDateTime` object into a Microsoft-style date string.
+   *
+   * The Microsoft date format represents dates as `"/Date(ticks[+-]offset)/"`, where:
+   * - `ticks` is the number of milliseconds since the Unix epoch (1970-01-01T00:00:00Z).
+   * - `offset` is the time zone offset in the format `+HHmm` or `-HHmm`.
+   *
+   * This method generates the Microsoft-specific string by converting the input `OffsetDateTime`
+   * into the required format and writes it to the provided JSON generator.
+   *
+   * @param value The `OffsetDateTime` object to serialize.
+   * @param gen The `JsonGenerator` used to write the JSON output.
+   * @param serializers The `SerializerProvider` for accessing configuration and other serializers
+   *   if needed.
+   */
   override fun serialize(
       value: OffsetDateTime,
       gen: JsonGenerator,

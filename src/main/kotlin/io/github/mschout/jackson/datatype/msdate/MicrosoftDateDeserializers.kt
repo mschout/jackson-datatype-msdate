@@ -42,6 +42,19 @@ private const val PARSE_ERROR_MSG = "Expected Microsoft date format: /Date(ticks
 class MicrosoftDateOffsetDateTimeDeserializer : JsonDeserializer<OffsetDateTime>() {
   private val parser = MicrosoftJsonDateParser()
 
+  /**
+   * Deserializes a JSON string into an `OffsetDateTime` object.
+   *
+   * This method attempts to parse a Microsoft-style date string, extracting the timestamp and time
+   * zone offset components to construct an `OffsetDateTime` instance. If the input string is null,
+   * it returns null. If parsing fails, an exception is thrown.
+   *
+   * @param p The `JsonParser` used to read the JSON input.
+   * @param ctx The `DeserializationContext` providing contextual information during
+   *   deserialization.
+   * @return The deserialized `OffsetDateTime` object, or null if the input string is null.
+   * @throws IllegalArgumentException If the string cannot be parsed into an `OffsetDateTime`.
+   */
   override fun deserialize(p: JsonParser, ctx: DeserializationContext): OffsetDateTime? {
     val text = p.text ?: return null
 
@@ -53,9 +66,39 @@ class MicrosoftDateOffsetDateTimeDeserializer : JsonDeserializer<OffsetDateTime>
   }
 }
 
+/**
+ * Custom deserializer for converting Microsoft-style date strings into `LocalDate` instances.
+ *
+ * This deserializer parses date strings formatted using the Microsoft date notation:
+ * `"/Date(ticks[+-]offset)/"`. The format represents:
+ * - `ticks`: The number of milliseconds since the Unix epoch (1970-01-01T00:00:00Z).
+ * - `offset`: An optional time zone offset in the format `+HHmm` or `-HHmm`.
+ *
+ * The deserialization process relies on the `MicrosoftJsonDateParser` to parse the input string,
+ * extract the date components, and convert it to a `LocalDate` by discarding the time zone
+ * information.
+ *
+ * Throws a `JsonMappingException` if the input string cannot be parsed due to invalid format or
+ * content.
+ */
 class MicrosoftDateLocalDateDeserializer : JsonDeserializer<LocalDate>() {
   private val parser = MicrosoftJsonDateParser()
 
+  /**
+   * Deserializes a JSON string into a `LocalDate` object.
+   *
+   * This method extracts the text content from the `JsonParser` and uses the
+   * `MicrosoftJsonDateParser` to process date strings formatted in Microsoft's style (e.g.,
+   * `"/Date(ticks[+-]offset)/"`). If successful, it returns the corresponding `LocalDate` by
+   * discarding time zone information.
+   *
+   * Throws a `JsonMappingException` when the input string cannot be parsed due to invalid format or
+   * content.
+   *
+   * @param p The `JsonParser` instance for extracting the JSON data.
+   * @param ctx The `DeserializationContext` used for handling deserialization-specific operations.
+   * @return A `LocalDate` object representing the parsed date, or `null` if the input is empty.
+   */
   override fun deserialize(p: JsonParser, ctx: DeserializationContext): LocalDate? {
     val text = p.text ?: return null
 

@@ -35,7 +35,8 @@ import java.time.OffsetDateTime
  * - `offset` is an optional time zone offset in the format `+HHmm` or `-HHmm`.
  *
  * Usage of this module ensures seamless conversion between `OffsetDateTime` and the
- * Microsoft-specific date notation during JSON serialization and deserialization.
+ * Microsoft-specific date notation during JSON serialization and deserialization. In addition,
+ * conversion from JSON to LocalDate is supported
  */
 class MicrosoftDateModule : SimpleModule("MicrosoftDateModule") {
   init {
