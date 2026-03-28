@@ -18,8 +18,7 @@ import com.vanniktech.maven.publish.KotlinJvm
 
 plugins {
   id("mschout.all-conventions")
-  alias(libs.plugins.dokka)
-  alias(libs.plugins.maven.publish)
+  id("mschout.maven-publish-conventions")
 }
 
 group = "io.github.mschout"

@@ -1,8 +1,6 @@
 [versions]
-dokka = "2.0.0"
 jackson = "2.21.1"
 kotest = "6.1.9"
-maven-publish = "0.36.0"
 microsoft-json-date-parser = "0.9.2"
 
 [libraries]
@@ -11,7 +9,3 @@ jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", ver
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 microsoft-json-date-parser = { module = "io.github.mschout:microsoft-json-date-parser", version.ref = "microsoft-json-date-parser" }
-
-[plugins]
-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
