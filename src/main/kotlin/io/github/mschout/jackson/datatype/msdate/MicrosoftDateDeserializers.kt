@@ -15,12 +15,12 @@
  */
 package io.github.mschout.jackson.datatype.msdate
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonDeserializer
 import io.github.mschout.microsoft.json.date.MicrosoftJsonDateParser
 import java.time.LocalDate
 import java.time.OffsetDateTime
+import tools.jackson.core.JsonParser
+import tools.jackson.databind.DeserializationContext
+import tools.jackson.databind.ValueDeserializer
 
 private const val PARSE_ERROR_MSG = "Expected Microsoft date format: /Date(ticks[+-]offset)/"
 
@@ -39,7 +39,7 @@ private const val PARSE_ERROR_MSG = "Expected Microsoft date format: /Date(ticks
  * This deserializer is compatible with Jackson's `ObjectMapper` and can be registered via a custom
  * module, such as `MicrosoftDateModule`.
  */
-class MicrosoftDateOffsetDateTimeDeserializer : JsonDeserializer<OffsetDateTime>() {
+class MicrosoftDateOffsetDateTimeDeserializer : ValueDeserializer<OffsetDateTime>() {
   private val parser = MicrosoftJsonDateParser()
 
   /**
@@ -56,7 +56,7 @@ class MicrosoftDateOffsetDateTimeDeserializer : JsonDeserializer<OffsetDateTime>
    * @throws IllegalArgumentException If the string cannot be parsed into an `OffsetDateTime`.
    */
   override fun deserialize(p: JsonParser, ctx: DeserializationContext): OffsetDateTime? {
-    val text = p.text ?: return null
+    val text = p.string ?: return null
 
     try {
       return parser.parse(text)?.offsetDateTime
@@ -78,10 +78,10 @@ class MicrosoftDateOffsetDateTimeDeserializer : JsonDeserializer<OffsetDateTime>
  * extract the date components, and convert it to a `LocalDate` by discarding the time zone
  * information.
  *
- * Throws a `JsonMappingException` if the input string cannot be parsed due to invalid format or
+ * Throws an `InvalidFormatException` if the input string cannot be parsed due to invalid format or
  * content.
  */
-class MicrosoftDateLocalDateDeserializer : JsonDeserializer<LocalDate>() {
+class MicrosoftDateLocalDateDeserializer : ValueDeserializer<LocalDate>() {
   private val parser = MicrosoftJsonDateParser()
 
   /**
@@ -92,15 +92,15 @@ class MicrosoftDateLocalDateDeserializer : JsonDeserializer<LocalDate>() {
    * `"/Date(ticks[+-]offset)/"`). If successful, it returns the corresponding `LocalDate` by
    * discarding time zone information.
    *
-   * Throws a `JsonMappingException` when the input string cannot be parsed due to invalid format or
-   * content.
+   * Throws an `InvalidFormatException` when the input string cannot be parsed due to invalid format
+   * or content.
    *
    * @param p The `JsonParser` instance for extracting the JSON data.
    * @param ctx The `DeserializationContext` used for handling deserialization-specific operations.
    * @return A `LocalDate` object representing the parsed date, or `null` if the input is empty.
    */
   override fun deserialize(p: JsonParser, ctx: DeserializationContext): LocalDate? {
-    val text = p.text ?: return null
+    val text = p.string ?: return null
 
     try {
       return parser.parse(text)?.offsetDateTime?.toLocalDate()

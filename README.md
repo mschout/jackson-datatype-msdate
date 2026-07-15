@@ -2,7 +2,7 @@
 
 A [Jackson](https://github.com/FasterXML/jackson) datatype module that adds support for serializing and deserializing Microsoft-style JSON date formats (`/Date(ticks+offset)/`) used by .NET and Microsoft REST APIs.
 
-This module handles conversion between `java.time.OffsetDateTime` and the Microsoft date format automatically when registered with a Jackson `ObjectMapper`.
+This module handles conversion between `java.time.OffsetDateTime` and the Microsoft date format automatically when registered with a Jackson mapper.
 
 ## Microsoft Date Format
 
@@ -52,13 +52,13 @@ dependencies {
 
 ## Usage
 
-Register the module with your `ObjectMapper`:
+Register the module when building your `JsonMapper`:
 
 ```kotlin
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.mschout.jackson.datatype.msdate.MicrosoftDateModule
+import tools.jackson.databind.json.JsonMapper
 
-val mapper = ObjectMapper().registerModule(MicrosoftDateModule())
+val mapper = JsonMapper.builder().addModule(MicrosoftDateModule()).build()
 ```
 
 Once registered, `OffsetDateTime` fields are automatically serialized and deserialized using the Microsoft date format.
@@ -87,7 +87,7 @@ val json = mapper.writeValueAsString(event)
 ## Requirements
 
 - Java 17+
-- Jackson 2.x
+- Jackson 3.x
 
 ## License
 

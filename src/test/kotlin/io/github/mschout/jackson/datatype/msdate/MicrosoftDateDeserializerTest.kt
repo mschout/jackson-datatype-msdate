@@ -15,8 +15,6 @@
  */
 package io.github.mschout.jackson.datatype.msdate
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
@@ -24,10 +22,12 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import tools.jackson.databind.exc.InvalidFormatException
+import tools.jackson.databind.json.JsonMapper
 
 class MicrosoftDateDeserializerTest :
     FunSpec({
-      val mapper = ObjectMapper().registerModule(MicrosoftDateModule())
+      val mapper = JsonMapper.builder().addModule(MicrosoftDateModule()).build()
 
       test("deserializes date with positive offset") {
         val result = mapper.readValue("\"/Date(1705305000000+0530)/\"", OffsetDateTime::class.java)

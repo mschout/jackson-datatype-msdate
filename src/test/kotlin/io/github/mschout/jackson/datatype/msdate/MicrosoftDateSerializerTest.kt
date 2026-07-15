@@ -15,15 +15,15 @@
  */
 package io.github.mschout.jackson.datatype.msdate
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import tools.jackson.databind.json.JsonMapper
 
 class MicrosoftDateSerializerTest :
     FunSpec({
-      val mapper = ObjectMapper().registerModule(MicrosoftDateModule())
+      val mapper = JsonMapper.builder().addModule(MicrosoftDateModule()).build()
 
       test("serializes OffsetDateTime with positive offset") {
         val dt = OffsetDateTime.of(2024, 1, 15, 10, 30, 0, 0, ZoneOffset.ofHoursMinutes(5, 30))

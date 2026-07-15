@@ -15,9 +15,9 @@
  */
 package io.github.mschout.jackson.datatype.msdate
 
-import com.fasterxml.jackson.databind.module.SimpleModule
 import java.time.LocalDate
 import java.time.OffsetDateTime
+import tools.jackson.databind.module.SimpleModule
 
 /**
  * A custom Jackson module that provides support for serializing and deserializing Microsoft-style

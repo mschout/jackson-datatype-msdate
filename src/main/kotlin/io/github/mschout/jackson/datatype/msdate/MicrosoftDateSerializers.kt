@@ -15,11 +15,11 @@
  */
 package io.github.mschout.jackson.datatype.msdate
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.JsonSerializer
-import com.fasterxml.jackson.databind.SerializerProvider
 import io.github.mschout.microsoft.json.date.MicrosoftJsonDate
 import java.time.OffsetDateTime
+import tools.jackson.core.JsonGenerator
+import tools.jackson.databind.SerializationContext
+import tools.jackson.databind.ValueSerializer
 
 /**
  * A custom serializer for converting `OffsetDateTime` objects into Microsoft-style date strings.
@@ -34,7 +34,7 @@ import java.time.OffsetDateTime
  * The serialized output ensures compatibility with systems or APIs that expect Microsoft-style date
  * representations.
  */
-class MicrosoftDateOffsetDateTimeSerializer : JsonSerializer<OffsetDateTime>() {
+class MicrosoftDateOffsetDateTimeSerializer : ValueSerializer<OffsetDateTime>() {
   /**
    * Serializes an `OffsetDateTime` object into a Microsoft-style date string.
    *
@@ -47,14 +47,10 @@ class MicrosoftDateOffsetDateTimeSerializer : JsonSerializer<OffsetDateTime>() {
    *
    * @param value The `OffsetDateTime` object to serialize.
    * @param gen The `JsonGenerator` used to write the JSON output.
-   * @param serializers The `SerializerProvider` for accessing configuration and other serializers
-   *   if needed.
+   * @param ctxt The `SerializationContext` for accessing configuration and other serializers if
+   *   needed.
    */
-  override fun serialize(
-      value: OffsetDateTime,
-      gen: JsonGenerator,
-      serializers: SerializerProvider,
-  ) {
+  override fun serialize(value: OffsetDateTime, gen: JsonGenerator, ctxt: SerializationContext) {
     val msDate = MicrosoftJsonDate(value)
     gen.writeString(msDate.toString())
   }
