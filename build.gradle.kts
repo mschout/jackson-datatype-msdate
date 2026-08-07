@@ -37,7 +37,11 @@ dependencies {
   testImplementation(libs.kotest.assertions.core)
 }
 
-kotlin { jvmToolchain(17) }
+kotlin {
+  jvmToolchain(17)
+
+  compilerOptions { extraWarnings.set(true) }
+}
 
 mavenPublishing {
   configure(KotlinJvm(javadocJar = JavadocJar.Dokka("dokkaGenerateModuleHtml")))
