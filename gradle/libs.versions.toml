@@ -1,7 +1,7 @@
 [versions]
 jackson = "3.2.1"
 kotest = "6.2.3"
-microsoft-json-date-parser = "0.9.2"
+microsoft-json-date-parser = "0.9.3"
 mschout-conventions = "0.5.0"
 
 [libraries]
