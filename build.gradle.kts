@@ -23,9 +23,9 @@ plugins {
 
 group = "io.github.mschout"
 
-val gitVersion: groovy.lang.Closure<String> by extra
+val gitVersion = extra["gitVersion"] as groovy.lang.Closure<*>
 
-version = gitVersion()
+version = gitVersion.call().toString()
 
 repositories { mavenCentral() }
 
@@ -37,7 +37,11 @@ dependencies {
   testImplementation(libs.kotest.assertions.core)
 }
 
-kotlin { jvmToolchain(17) }
+kotlin {
+  jvmToolchain(17)
+
+  compilerOptions { extraWarnings.set(true) }
+}
 
 mavenPublishing {
   configure(KotlinJvm(javadocJar = JavadocJar.Dokka("dokkaGenerateModuleHtml")))
