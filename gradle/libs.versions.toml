@@ -2,6 +2,7 @@
 jackson = "3.2.1"
 kotest = "6.1.9"
 microsoft-json-date-parser = "0.9.2"
+mschout-conventions = "0.5.0"
 
 [libraries]
 jackson-core = { module = "tools.jackson.core:jackson-core", version.ref = "jackson" }
@@ -9,3 +10,7 @@ jackson-databind = { module = "tools.jackson.core:jackson-databind", version.ref
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 microsoft-json-date-parser = { module = "io.github.mschout:microsoft-json-date-parser", version.ref = "microsoft-json-date-parser" }
+
+[plugins]
+mschout-all-conventions = { id = "io.github.mschout.all-conventions", version.ref = "mschout-conventions" }
+mschout-maven-publish-conventions = { id = "io.github.mschout.maven-publish-conventions", version.ref = "mschout-conventions" }
