@@ -17,8 +17,8 @@ import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.KotlinJvm
 
 plugins {
-  id("io.github.mschout.all-conventions")
-  id("io.github.mschout.maven-publish-conventions")
+  id("io.github.mschout.all-conventions") version("0.5.0")
+  id("io.github.mschout.maven-publish-conventions") version("0.5.0")
 }
 
 group = "io.github.mschout"
