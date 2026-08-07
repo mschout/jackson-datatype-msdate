@@ -23,9 +23,9 @@ plugins {
 
 group = "io.github.mschout"
 
-val gitVersion: groovy.lang.Closure<String> by extra
+val gitVersion = extra["gitVersion"] as groovy.lang.Closure<*>
 
-version = gitVersion()
+version = gitVersion.call().toString()
 
 repositories { mavenCentral() }
 
