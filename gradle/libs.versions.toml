@@ -2,7 +2,7 @@
 jackson = "3.2.1"
 kotest = "6.2.3"
 microsoft-json-date-parser = "0.9.3"
-mschout-conventions = "0.5.0"
+mschout-conventions = "0.6.0"
 
 [libraries]
 jackson-core = { module = "tools.jackson.core:jackson-core", version.ref = "jackson" }
