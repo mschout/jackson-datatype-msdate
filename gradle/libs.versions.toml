@@ -1,5 +1,5 @@
 [versions]
-jackson = "3.2.1"
+jackson = "3.2.3"
 kotest = "6.2.5"
 microsoft-json-date-parser = "0.9.3"
 mschout-conventions = "0.6.0"
